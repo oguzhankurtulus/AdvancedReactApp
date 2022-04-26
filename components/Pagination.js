@@ -37,7 +37,7 @@ function Pagination({ page }) {
             </p>
             <p> {count} Items Total</p>
             <Link href={`/products/${page + 1}`}>
-                <a aria-disabled={page >= 1}>Next</a>
+                <a aria-disabled={page >= pageCount}>Next</a>
             </Link>
         </PaginationStyles>
     );
