@@ -51,7 +51,7 @@ function Reset({ token }) {
                     />
                 </label>
                 <label htmlFor="password">
-                    Email
+                    New Password
                     <input
                         type="password"
                         name="password"
