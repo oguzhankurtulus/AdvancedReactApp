@@ -1,5 +1,7 @@
+import { useMutation } from '@apollo/client';
 import { CardElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import gql from 'graphql-tag';
 import nProgress from 'nprogress';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -14,6 +16,20 @@ const CheckoutFormStyles = styled.form`
     grid-gap: 1rem;
 `;
 
+const CREATE_ORDER_MUTATION = gql`
+    mutation CREATE_ORDER_MUTATION($token: String!) {
+        checkout(token: $token) {
+            id
+            charge
+            total
+            items {
+                id
+                name
+            }
+        }
+    }
+`;
+
 const stripeLib = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
 export default function CheckoutForm() {
@@ -21,6 +37,8 @@ export default function CheckoutForm() {
     const [loading, setLoading] = useState(false);
     const stripe = useStripe();
     const elements = useElements();
+
+    const [checkout, { error: graphQLError }] = useMutation(CREATE_ORDER_MUTATION);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,9 +51,21 @@ export default function CheckoutForm() {
             card: elements.getElement(CardElement),
         });
 
+        console.log(paymentMethod, 'paymentMethod');
+
         if (error) {
             setError(error);
+            nProgress.done();
+            return;
         }
+
+        const order = await checkout({
+            variables: {
+                token: paymentMethod.id,
+            },
+        });
+
+        console.log(order);
 
         setLoading(false);
         nProgress.done();
@@ -43,6 +73,7 @@ export default function CheckoutForm() {
     return (
         <CheckoutFormStyles onSubmit={handleSubmit}>
             {error && <p style={{ fontSize: 12 }}>{error.message}</p>}
+            {graphQLError && <p style={{ fontSize: 12 }}>{graphQLError.message}</p>}
             <CardElement />
             <SickButton>Check Out Now</SickButton>
         </CheckoutFormStyles>
