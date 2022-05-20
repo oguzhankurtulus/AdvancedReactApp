@@ -39,7 +39,6 @@ const OrderUl = styled.ul`
 `;
 
 function countItemsInAnOrder(order) {
-    console.log(order, 'order');
     return order.items.reduce((tally, item) => tally + item.quantity, 0);
 }
 
