@@ -30,4 +30,14 @@ describe('<Product />', () => {
         );
         expect(container).toMatchSnapshot();
     });
+
+    it('renders the image properly', () => {
+        const { container } = render(
+            <MockedProvider>
+                <Product product={product} />
+            </MockedProvider>
+        );
+        const img = screen.getByAltText(product.name);
+        expect(img).toBeInTheDocument();
+    });
 });
