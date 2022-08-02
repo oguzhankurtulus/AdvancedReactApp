@@ -32,7 +32,7 @@ describe('<Product />', () => {
     });
 
     it('renders the image properly', () => {
-        const { container } = render(
+        render(
             <MockedProvider>
                 <Product product={product} />
             </MockedProvider>

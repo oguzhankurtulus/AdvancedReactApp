@@ -1,10 +1,10 @@
-import Head from 'next/head';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
+import Head from 'next/head';
 import styled from 'styled-components';
 import DisplayError from './ErrorMessage';
 
-const SINGLE_ITEM_QUERY = gql`
+export const SINGLE_ITEM_QUERY = gql`
     query SINGLE_ITEM_QUERY($id: ID!) {
         item: Product(where: { id: $id }) {
             name
@@ -44,17 +44,17 @@ export default function SingleProduct({ id }) {
     if (loading) return <div>Loading...</div>;
     if (error) return <DisplayError error={error} />;
 
-    const { item } = data;
+    const { Product } = data;
 
     return (
-        <ProductStyles>
+        <ProductStyles data-testid="singleProduct">
             <Head>
-                <title>Sick Fits | {item?.name}</title>
+                <title>Sick Fits | {Product?.name}</title>
             </Head>
-            <img src={item?.photo?.image?.publicUrlTransformed} alt={`${item?.photo?.image?.altText}`} />
+            <img src={Product?.photo?.image?.publicUrlTransformed} alt={`${Product?.photo?.image?.altText}`} />
             <div className="details">
-                <h2>{item?.name}</h2>
-                <p>{item?.description}</p>
+                <h2>{Product?.name}</h2>
+                <p>{Product?.description}</p>
             </div>
         </ProductStyles>
     );
