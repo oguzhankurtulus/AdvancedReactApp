@@ -108,3 +108,6 @@ dist
 
 .env.local
 .env
+
+.husky
+.husky/*
