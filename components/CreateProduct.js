@@ -2,11 +2,11 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import Router from 'next/router';
 import useForm from '../lib/useForm';
-import Form from './styles/Form';
 import DisplayError from './ErrorMessage';
 import { ALL_PRODUCTS_QUERY } from './Products';
+import Form from './styles/Form';
 
-const CREATE_PRODUCT_MUTATION = gql`
+export const CREATE_PRODUCT_MUTATION = gql`
     mutation CREATE_PRODUCT_MUTATION(
         # Which variables are getting passed in? And What types are they
         $name: String!
@@ -34,9 +34,9 @@ const CREATE_PRODUCT_MUTATION = gql`
 function CreateProduct() {
     const { inputs, handleChange, clearForm } = useForm({
         image: '',
-        name: 'Nike Shoes',
-        price: 123,
-        description: 'Comfortable Shoes',
+        name: '',
+        price: 0,
+        description: '',
     });
 
     const [createProduct, { loading, error }] = useMutation(CREATE_PRODUCT_MUTATION, {
@@ -97,7 +97,9 @@ function CreateProduct() {
                         onChange={handleChange}
                     />
                 </label>
-                <button type="submit">+ Add Product</button>
+                <button type="submit" data-testid="submitButton">
+                    + Add Product
+                </button>
             </fieldset>
         </Form>
     );
